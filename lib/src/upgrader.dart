@@ -130,6 +130,9 @@ class Upgrader {
   /// The target operating system.
   final String operatingSystem = UpgradeIO.operatingSystem;
 
+  /// if true modal will showing forever
+  final bool forceUpdate;
+
   bool _displayed = false;
   bool _initCalled = false;
   PackageInfo? _packageInfo;
@@ -169,6 +172,7 @@ class Upgrader {
     this.countryCode,
     this.minAppVersion,
     this.dialogStyle = UpgradeDialogStyle.material,
+    this.forceUpdate = false,
     TargetPlatform? platform,
   })  : client = client ?? http.Client(),
         messages = messages ?? UpgraderMessages(),
@@ -727,7 +731,9 @@ class Upgrader {
     }
 
     if (shouldPop) {
-      popNavigator(context);
+      if (!forceUpdate) {
+        popNavigator(context);
+      }
     }
   }
 
