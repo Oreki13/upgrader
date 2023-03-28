@@ -155,6 +155,8 @@ class Upgrader {
   /// Track the initialization future so that [initialize] can be called multiple times.
   Future<bool>? _futureInit;
 
+  bool forceUpdate;
+
   final notInitializedExceptionMessage =
       'initialize() not called. Must be called first.';
 
@@ -181,6 +183,7 @@ class Upgrader {
     this.minAppVersion,
     this.dialogStyle = UpgradeDialogStyle.material,
     this.cupertinoButtonTextStyle,
+    this.forceUpdate = false,
     TargetPlatform? platform,
   })  : client = client ?? http.Client(),
         messages = messages ?? UpgraderMessages(),
@@ -792,8 +795,10 @@ class Upgrader {
   }
 
   void popNavigator(BuildContext context) {
-    Navigator.of(context).pop();
-    _displayed = false;
+    if (!forceUpdate) {
+      Navigator.of(context).pop();
+      _displayed = false;
+    }
   }
 
   Future<bool> _saveIgnored() async {
